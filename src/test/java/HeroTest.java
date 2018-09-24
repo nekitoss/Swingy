@@ -1,14 +1,15 @@
 import org.junit.Assert;
 import org.junit.Test;
-import ua.nekitoss.model.heroes.Attacker;
+import ua.nekitoss.model.heroes.Hero;
+import ua.nekitoss.model.heroes.HeroBuilder;
 
-public class AttackerTest {
+public class HeroTest {
 
   private static final String MESSAGE = "exp is calculated wrong";
 
   @Test
   public void testCalculateLvlByExp(){
-    Attacker a = new Attacker();
+    Hero a = HeroBuilder.createAttacker();
     Assert.assertEquals(MESSAGE, 0, a.calculateLvlByExp(0));
     Assert.assertEquals(MESSAGE, 0, a.calculateLvlByExp(1));
     Assert.assertEquals(MESSAGE, 0, a.calculateLvlByExp(999));

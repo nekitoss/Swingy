@@ -14,7 +14,7 @@ public class HeroBuilder implements IHeroBuilder{
   @NotEmpty
   private char mapSign;
   @NotNull
-  private AHero.HeroClass classOfHero;
+  private Hero.HeroClass classOfHero;
   @PositiveOrZero
   private int level;
   @PositiveOrZero
@@ -28,56 +28,70 @@ public class HeroBuilder implements IHeroBuilder{
 
 
   @Override
-  public void setHeroName(String name) {
+  public HeroBuilder setHeroName(String name) {
     this.name = name;
+    return this;
   }
 
   @Override
-  public void setHeroXPos(int xPos) {
+  public HeroBuilder setHeroXPos(int xPos) {
     this.xPos = xPos;
+    return this;
   }
 
   @Override
-  public void setHeroYPos(int yPos) {
+  public HeroBuilder setHeroYPos(int yPos) {
     this.yPos = yPos;
+    return this;
   }
 
   @Override
-  public void setHeroClass(AHero.HeroClass class4Hero) {
+  public HeroBuilder setHeroClass(Hero.HeroClass class4Hero) {
     this.classOfHero = class4Hero;
+    return this;
   }
 
   @Override
-  public void setHeroLvl(int level) {
+  public HeroBuilder setHeroLvl(int level) {
     this.level = level;
+    return this;
   }
 
   @Override
-  public void setHeroExp(int experience) {
+  public HeroBuilder setHeroExp(int experience) {
     this.experience = experience;
+    return this;
   }
 
   @Override
-  public void setHeroAttack(int attack) {
+  public HeroBuilder setHeroAttack(int attack) {
     this.attack = attack;
+    return this;
   }
 
   @Override
-  public void setHeroDefence(int defense) {
+  public HeroBuilder setHeroDefence(int defense) {
     this.defense = defense;
+    return this;
   }
 
   @Override
-  public void setHeroHp(int hp) {
+  public HeroBuilder setHeroHp(int hp) {
     this.hp = hp;
+    return this;
   }
 
   @Override
-  public void setHeroMapSign(char sign) {
+  public HeroBuilder setHeroMapSign(char sign) {
     this.mapSign = sign;
+    return this;
   }
 
-  public AHero getResult(){
-    return new Attacker();//name, xPos, yPos, mapSign, classOfHero, level, experience, attack, defense, hp);
+  public Hero getResult(){
+    return new Hero(name, xPos, yPos, mapSign, classOfHero, level, experience, attack, defense, hp);
+  }
+
+  public static Hero createAttacker(){
+    return new Hero("DefaultAttacker", 0, 0, 'A', Hero.HeroClass.attacker, 0, 0, 20, 2, 10);
   }
 }

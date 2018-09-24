@@ -3,23 +3,21 @@ package ua.nekitoss.model.heroes;
 import lombok.Getter;
 import lombok.Setter;
 import ua.nekitoss.model.AMapElement;
+import ua.nekitoss.model.ASoul;
+import ua.nekitoss.model.equipment.AEquip;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
 
-public abstract class AHero extends AMapElement {
+public  class Hero extends ASoul {
   public enum HeroClass {
     attacker,
     firstHeroClassType,
     secondHeroClassType
   }
 
-//  @NotEmpty
-//  @Getter
-//  @Setter
-//  protected String  name;
   @NotNull
   @Getter
   @Setter
@@ -28,20 +26,17 @@ public abstract class AHero extends AMapElement {
   protected int level;
   @PositiveOrZero
   protected int experience;
-  @PositiveOrZero
   @Getter
   @Setter
-  protected int attack;
-  @PositiveOrZero
+  protected AEquip weapon;
   @Getter
   @Setter
-  protected int defense;
-  @Positive
+  protected AEquip helm;
   @Getter
   @Setter
-  protected int hp;
+  protected AEquip armor;
 
-  public AHero(@NotEmpty String name, int xPos, int yPos,@NotEmpty char mapSign, @NotNull HeroClass classOfHero, @PositiveOrZero int level, @PositiveOrZero int experience, @PositiveOrZero int attack, @PositiveOrZero int defense, @Positive int hp) {
+  public Hero(@NotEmpty String name, int xPos, int yPos, @NotEmpty char mapSign, @NotNull HeroClass classOfHero, @PositiveOrZero int level, @PositiveOrZero int experience, @PositiveOrZero int attack, @PositiveOrZero int defense, @Positive int hp) {
     this.name = name;
     this.xPos = xPos;
     this.yPos = yPos;
@@ -71,6 +66,10 @@ public abstract class AHero extends AMapElement {
     this.setLevel(this.calculateLvlByExp(experience));
   }
 
+  public void addExperience(int experience) {
+    this.setExperience(getExperience() + experience);
+  }
+
   public int calculateLvlByExp(int experience)
   {
     if (experience < 1000)
@@ -84,6 +83,21 @@ public abstract class AHero extends AMapElement {
     return level-1;
   }
 
+  @Override
+  public String toString() {
+    return "Hero{" +
+            "classOfHero=" + classOfHero +
+            ", level=" + level +
+            ", experience=" + experience +
+            ", attack=" + attack +
+            ", defense=" + defense +
+            ", hp=" + hp +
+            ", name='" + name + '\'' +
+            ", xPos=" + xPos +
+            ", yPos=" + yPos +
+            ", mapSign=" + mapSign +
+            '}';
+  }
 
   //  Weapon[3] weapons;
 //          • Weapon - increases the attack

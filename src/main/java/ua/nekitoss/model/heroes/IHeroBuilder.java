@@ -1,14 +1,14 @@
 package ua.nekitoss.model.heroes;
 
 public interface IHeroBuilder {
-  public void setHeroName(String name);
-  public void setHeroXPos(int xPos);
-  public void setHeroYPos(int yPos);
-  public void setHeroClass(AHero.HeroClass class4Hero);
-  public void setHeroLvl(int level);
-  public void setHeroExp(int experience);
-  public void setHeroAttack(int attack);
-  public void setHeroDefence(int defense);
-  public void setHeroHp(int hp);
-  public void setHeroMapSign(char sign);
+  public IHeroBuilder setHeroName(String name);
+  public IHeroBuilder setHeroXPos(int xPos);
+  public IHeroBuilder setHeroYPos(int yPos);
+  public IHeroBuilder setHeroClass(Hero.HeroClass class4Hero);
+  public IHeroBuilder setHeroLvl(int level);
+  public IHeroBuilder setHeroExp(int experience);
+  public IHeroBuilder setHeroAttack(int attack);
+  public IHeroBuilder setHeroDefence(int defense);
+  public IHeroBuilder setHeroHp(int hp);
+  public IHeroBuilder setHeroMapSign(char sign);
 }
