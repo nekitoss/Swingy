@@ -11,4 +11,10 @@ public class Plankton extends AEnemy {
   public Plankton() {
     this(0,0);
   }
+
+  public Plankton(int addNumToName) {
+    this(0,0);
+    this.name += addNumToName;
+  }
+
 }

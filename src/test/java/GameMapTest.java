@@ -10,7 +10,7 @@ import java.util.ArrayList;
 public class GameMapTest {
   @Test
   public void wrongMapSize(){
-    GameMap tmp = new GameMap();
+    GameMap tmp = GameMap.getInstance();
     AMapElement[][] tmp2 = null;
     Assert.assertNull("wrong size (-1) doesn't returned null", tmp.createMap(-1));
     Assert.assertNull("wrong size (0) doesn't returned null", tmp.createMap(0));

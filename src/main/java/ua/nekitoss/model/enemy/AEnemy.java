@@ -1,17 +1,11 @@
 package ua.nekitoss.model.enemy;
 
-import lombok.Getter;
-import lombok.Setter;
-import ua.nekitoss.model.AMapElement;
 import ua.nekitoss.model.ASoul;
-
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
 
 public class AEnemy extends ASoul {
   @PositiveOrZero
-  @Getter
-  @Setter
   protected int experienceForKill;
 
 
@@ -26,4 +20,7 @@ public class AEnemy extends ASoul {
 
   protected AEnemy() {}
 
+  public int getExperienceForKill() {
+    return experienceForKill;
+  }
 }

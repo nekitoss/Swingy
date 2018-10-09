@@ -12,10 +12,12 @@ import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
 
 public  class Hero extends ASoul {
+  private static Hero instance;
   public enum HeroClass {
     attacker,
     firstHeroClassType,
-    secondHeroClassType
+    secondHeroClassType,
+    defaultHero
   }
 
   @NotNull
@@ -36,6 +38,25 @@ public  class Hero extends ASoul {
   @Setter
   protected AEquip armor;
 
+  private Hero() {
+    this.name = "DefaultHero";
+    this.mapSign = 'H';
+    this.classOfHero = HeroClass.defaultHero;
+    this.level = 0;
+    this.experience = 0;
+    this.attack = 0;
+    this.defense = 0;
+    this.hp = 1;
+    instance = this;
+  }
+
+  public static Hero getInstance(){
+    if (instance == null){
+      instance = new Hero();
+    }
+    return instance;
+  }
+
   public Hero(@NotEmpty String name, int xPos, int yPos, @NotEmpty char mapSign, @NotNull HeroClass classOfHero, @PositiveOrZero int level, @PositiveOrZero int experience, @PositiveOrZero int attack, @PositiveOrZero int defense, @Positive int hp) {
     this.name = name;
     this.xPos = xPos;
@@ -47,6 +68,7 @@ public  class Hero extends ASoul {
     this.attack = attack;
     this.defense = defense;
     this.hp = hp;
+    instance = this;
   }
 
   public int getLevel() {
@@ -61,13 +83,17 @@ public  class Hero extends ASoul {
     return experience;
   }
 
-  public void setExperience(int experience) {
+  public boolean setExperience(int experience) {
     this.experience = experience;
+    int oldLvl = this.level;
     this.setLevel(this.calculateLvlByExp(experience));
+    if (oldLvl != this.level)
+      return true;
+    return false;
   }
 
-  public void addExperience(int experience) {
-    this.setExperience(getExperience() + experience);
+  public boolean addExperience(int experience) {
+    return (this.setExperience(getExperience() + experience));
   }
 
   public int calculateLvlByExp(int experience)

@@ -1,38 +1,39 @@
 package ua.nekitoss.model;
 
 
-import lombok.Getter;
 import java.util.Random;
 
 public class GameMap {
-  static int mapCenter;
+  private static GameMap instance;
+  public static int mapCenter;
 
-  @Getter
-  static int size;
-  @Getter
+  private static int size;
   public AMapElement[][] map;
 //  char charMap[][];
 
-//  public GameMap() {
-//  }
-//
-//  public GameMap(int size) {
-//    this =
-//  }
+  private GameMap() {
+  }
 
-  public GameMap createMap(int size){
-    if (size < 5) {
-      System.err.println("wrong map size to create:" + size);
+  public static GameMap getInstance(){
+    if (instance == null){
+      instance = new GameMap();
+    }
+    return instance;
+  }
+
+  public GameMap createMap(int sizeToCreate){
+    if (sizeToCreate < 5) {
+      System.err.println("wrong map size to create:" + sizeToCreate);
       return null;
     }
-    if (size % 2 != 1) {
+    if (sizeToCreate % 2 != 1) {
       System.err.println("map is not odd (%2!=1)");
       return null;
     }
-    this.size = size;
-    mapCenter = size / 2 + 1;
+    size = sizeToCreate;
+    mapCenter = sizeToCreate / 2;
     map = null;
-    map = new AMapElement[size][size];
+    map = new AMapElement[sizeToCreate][sizeToCreate];
     return this;
   }
 
@@ -69,8 +70,8 @@ public class GameMap {
 
   public void printMap(){
     if (this.map != null){
-      for (int i=0; i < this.size; i++){
-        for (int j=0; j < this.size; j++){
+      for (int i=0; i < size; i++){
+        for (int j=0; j < size; j++){
           if (map[i][j] == null)
             System.out.print('.');
           else
@@ -79,6 +80,22 @@ public class GameMap {
         System.out.println();
       }
     }
+  }
+
+  public String mapAsString(){
+    StringBuffer tmp = new StringBuffer();
+    if (this.map != null){
+      for (int i=0; i < size; i++){
+        for (int j=0; j < size; j++){
+          if (map[i][j] == null)
+            tmp.append('X');
+          else
+            tmp.append((map[i][j]).mapSign);
+        }
+        tmp.append('\n');
+      }
+    }
+    return tmp.toString();
   }
 
   public boolean isFree(int x, int y){
@@ -97,5 +114,15 @@ public class GameMap {
     return true;
   }
 
+  public static int getSize() {
+    return size;
+  }
 
+  public int getCenter(){
+    return mapCenter;
+  }
+
+  public AMapElement[][] getMap() {
+    return map;
+  }
 }
