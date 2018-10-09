@@ -1,0 +1,8 @@
+<hibernate-mapping>
+    <class name="ua.nekitoss.TableTestClass" table="test_table">
+        <id column="id" name="id" type="int">
+            <generator class="native"/>
+        </id>
+        <property column="name" name ="name" type="string"/>
+    </class>
+</hibernate-mapping>
