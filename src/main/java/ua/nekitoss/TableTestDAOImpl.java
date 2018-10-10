@@ -28,17 +28,19 @@ public class TableTestDAOImpl {
     }
   }
 
-  public void addTT(TableTestClass t) throws SQLException {
+  public int addTT(TableTestClass t) throws SQLException {
     Session session = null;
     Transaction tx = null;
+    int id = 0;
     try {
       session = sessionFactory.openSession();
       tx = session.beginTransaction();
-      Integer id = 0;
-      id = (Integer) session.save(t); //return id of save
+
+      id = (int) session.save(t); //return id of save
 //      session.saveOrUpdate(t);
       tx.commit(); //session.getTransaction().commit();
-      System.out.println("id=" + id);
+//      System.out.println("id=" + id);
+      System.out.println(t.getId());
     } catch (Exception e) {
       if (tx!=null) tx.rollback();
       e.printStackTrace();
@@ -48,9 +50,10 @@ public class TableTestDAOImpl {
         session.close();
       }
     }
+    return id;
   }
 
-    public static void getAllData() throws Exception {
+  public static void getAllData() throws Exception {
 
       Session session = sessionFactory.openSession();
       org.hibernate.Transaction tr = session.beginTransaction();

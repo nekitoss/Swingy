@@ -1,11 +1,5 @@
 package ua.nekitoss;
 
-import ua.nekitoss.controller.Gameplay;
-import ua.nekitoss.controller.MainFrameController;
-import ua.nekitoss.model.heroes.Hero;
-import ua.nekitoss.model.heroes.HeroBuilder;
-import ua.nekitoss.view.graphic.GameFrame;
-
 import java.sql.SQLException;
 
 public class Main {
@@ -39,12 +33,12 @@ public class Main {
 //    System.out.println("end of while");
 
     TableTestClass tmp = new TableTestClass();
-    tmp.setId(22);
-    tmp.setName("first born");
+    tmp.setName("first born5");
 
     TableTestDAOImpl s = new TableTestDAOImpl();
     try {
-      s.addTT(tmp);
+      int num = s.addTT(tmp);
+//      tmp.setId(num); //не надо - прописывает автоматом
 //      s.getAllData();
     } catch (SQLException e) {
       e.printStackTrace();

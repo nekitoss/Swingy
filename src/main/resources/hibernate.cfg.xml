@@ -12,9 +12,10 @@
     <!--<property name="connection.pool_size">1</property>-->
     <property name="hbm2ddl.auto">update</property>
 
-      <mapping resource="TableTestClass.hbm.xml"/>
-      <!--<mapping class="ua.nekitoss.TableTestClass"/>-->
+    <!--<mapping resource="TableTestClass.hbm.xml"/>-->
+    <mapping class="ua.nekitoss.TableTestClass"/>
+    <!--<mapping class="ua.nekitoss.TestTableEntity"/>-->
 
-      <!-- DB schema will be updated if needed -->
+    <!-- DB schema will be updated if needed -->
   </session-factory>
 </hibernate-configuration>
