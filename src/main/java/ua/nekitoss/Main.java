@@ -33,11 +33,41 @@ public class Main {
 //    System.out.println("end of while");
 
     TableTestClass tmp = new TableTestClass();
-    tmp.setName("first born5");
+    tmp.setName("2Greatest born");
+//    tmp.setSlaveInfo(new SlaveClass());
+    tmp.getSlaveInfo().setInfo("i'm slave of " + tmp.getName());
+    tmp.getSlaveInfo().setSlave_id(tmp.getId());
+
+//    TableTestClass tmp2 = new TableTestClass();
+//    tmp2.setName("2Greatest born");
+//    tmp2.setSlaveInfo(new SlaveClass());
+//    tmp2.getSlaveInfo().setInfo("i'm slave of " + tmp2.getName());
+//    tmp2.getSlaveInfo().setSlave_id(tmp2.getId());
+//
+//    TableTestClass tmp3 = new TableTestClass();
+//    tmp3.setName("2Greatest born");
+//    tmp3.setSlaveInfo(new SlaveClass());
+//    tmp3.getSlaveInfo().setInfo("i'm slave of " + tmp3.getName());
+//    tmp3.getSlaveInfo().setSlave_id(tmp3.getId());
+
+/*
+    TexClass extTmp = new TexClass();
+    extTmp.setExtendInt(333);
+
+    Tex2Class ext2Tmp = new Tex2Class();
+    ext2Tmp.setExtend2Int(444);
+*/
 
     TableTestDAOImpl s = new TableTestDAOImpl();
     try {
-      int num = s.addTT(tmp);
+//        s.addTT(tmp);
+        tmp.setName("2OOps, i wa already born");
+        s.saveOrUpdate(tmp);
+//      s.addTT(tmp);
+//      s.addTT(tmp2);
+//      s.addTT(tmp3);
+//      s.addTT(extTmp);
+//      s.addTT(ext2Tmp);
 //      tmp.setId(num); //не надо - прописывает автоматом
 //      s.getAllData();
     } catch (SQLException e) {

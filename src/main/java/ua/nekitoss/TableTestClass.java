@@ -6,34 +6,15 @@ import org.hibernate.annotations.Type;
 import javax.persistence.*;
 
 @Entity
+@DiscriminatorValue("TableTestClass")
 @Table(name = "test_table", schema = "main")
-public class TableTestClass implements java.io.Serializable{
+public class TableTestClass extends SuperClass{
 
-  private int id;
-  @Id
-  @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
-  @GenericGenerator(name = "native", strategy = "native")
-  @Type(type="int")
-  @Column(name = "id")
-  public int getId() {
-    return id;
-  }
-
-  public void setId(int id) {
-    this.id = id;
-  }
-
-
-
-
-
-
-
-  private String name;
 
   @Basic
   @Type(type="string")
   @Column(name = "name")
+  private String name;
   public String getName() {
     return name;
   }
@@ -42,13 +23,28 @@ public class TableTestClass implements java.io.Serializable{
   }
 
 
+  @OneToOne(cascade = CascadeType.ALL)
+//  @Transient
+//  @OneToOne(cascade = CascadeType.ALL, mappedBy = "father")//fetch = FetchType.LAZY,
+//  @PrimaryKeyJoinColumn
+  @JoinColumn(name = "slave_id")
+
+  private SlaveClass slaveInfo;
+  public SlaveClass getSlaveInfo() {
+    return slaveInfo;
+  }
+  public void setSlaveInfo(SlaveClass slaveInfo) {
+    this.slaveInfo = slaveInfo;
+  }
+
   public TableTestClass() {
+    this.slaveInfo = new SlaveClass();
   }
 
 
 
 
-  @Override
+  /*@Override
   public String toString() {
     return "TableTestClass{" +
             "id=" + id +
@@ -72,5 +68,5 @@ public class TableTestClass implements java.io.Serializable{
   @Override
   public int hashCode() {
     return super.hashCode();
-  }
+  }*/
 }

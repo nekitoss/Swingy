@@ -15,6 +15,9 @@
     <!--<mapping resource="TableTestClass.hbm.xml"/>-->
     <mapping class="ua.nekitoss.TableTestClass"/>
     <!--<mapping class="ua.nekitoss.TestTableEntity"/>-->
+    <mapping class="ua.nekitoss.SlaveClass"/>
+    <mapping class="ua.nekitoss.TexClass"/>
+    <mapping class="ua.nekitoss.Tex2Class"/>
 
     <!-- DB schema will be updated if needed -->
   </session-factory>

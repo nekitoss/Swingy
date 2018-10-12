@@ -1,5 +1,6 @@
 package ua.nekitoss;
 
+import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -8,6 +9,7 @@ import org.hibernate.cfg.Configuration;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.swing.*;
 import java.sql.SQLException;
+import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
 
@@ -28,7 +30,7 @@ public class TableTestDAOImpl {
     }
   }
 
-  public int addTT(TableTestClass t) throws SQLException {
+  public int addTT(SuperClass t) throws SQLException {
     Session session = null;
     Transaction tx = null;
     int id = 0;
@@ -42,7 +44,7 @@ public class TableTestDAOImpl {
 //      System.out.println("id=" + id);
       System.out.println(t.getId());
     } catch (Exception e) {
-      if (tx!=null) tx.rollback();
+      if (tx != null) tx.rollback();
       e.printStackTrace();
       JOptionPane.showMessageDialog(null, e.getMessage(), "Ошибка при вставке", JOptionPane.OK_OPTION);
     } finally {
@@ -53,26 +55,104 @@ public class TableTestDAOImpl {
     return id;
   }
 
+  public void saveOrUpdate(SuperClass t) throws SQLException {
+    Session session = null;
+    Transaction tx = null;
+    try {
+      session = sessionFactory.openSession();
+      tx = session.beginTransaction();
+      session.saveOrUpdate(t);
+      tx.commit();
+      System.out.println(t.getId());
+    } catch (Exception e) {
+      if (tx != null) tx.rollback();
+      e.printStackTrace();
+      JOptionPane.showMessageDialog(null, e.getMessage(), "Ошибка при вставке", JOptionPane.OK_OPTION);
+    } finally {
+      if (session != null && session.isOpen()) {
+        session.close();
+      }
+    }
+  }
+
   public static void getAllData() throws Exception {
 
-      Session session = sessionFactory.openSession();
-      org.hibernate.Transaction tr = session.beginTransaction();
-      CriteriaQuery cq = session.getCriteriaBuilder().createQuery(TableTestClass.class);
+    Session session = sessionFactory.openSession();
+    org.hibernate.Transaction tr = session.beginTransaction();
+    CriteriaQuery cq = session.getCriteriaBuilder().createQuery(TableTestClass.class);
 
-      cq.from(TableTestClass.class);
-      List<TableTestClass> employeeList = session.createQuery(cq).getResultList();
+    cq.from(TableTestClass.class);
+    List<TableTestClass> employeeList = session.createQuery(cq).getResultList();
 
-      for (TableTestClass employee : employeeList) {
-        System.out.println("ID: " + employee.getId());
-        System.out.println("Name: " + employee.getName());
-      }
-
-
-      tr.commit();
-      System.out.println("Data printed");
-      session.close();
-
+    for (TableTestClass employee : employeeList) {
+      System.out.println("ID: " + employee.getId());
+      System.out.println("Name: " + employee.getName());
     }
+
+    tr.commit();
+    System.out.println("Data printed");
+    session.close();
+  }
+
+  // Method to  READ all the employees
+  public void listEmployees() {
+    Session session = sessionFactory.openSession();
+    Transaction tx = null;
+
+    try {
+      tx = session.beginTransaction();
+      List employees = session.createQuery("FROM TableTestClass").list();
+      for (Iterator iterator = employees.iterator(); iterator.hasNext(); ) {
+        TableTestClass ttOne = (TableTestClass) iterator.next();
+        System.out.print("Id: " + ttOne.getId());
+        System.out.println("  Name: " + ttOne.getName());
+      }
+      tx.commit();
+    } catch (HibernateException e) {
+      if (tx != null) tx.rollback();
+      e.printStackTrace();
+    } finally {
+      session.close();
+    }
+  }
+
+  // Method to UPDATE salary for an employee
+  public void updateEmployee(Integer id, String newName) {
+    Session session = sessionFactory.openSession();
+    Transaction tx = null;
+
+    try {
+      tx = session.beginTransaction();
+      TableTestClass ttOne = (TableTestClass) session.get(TableTestClass.class, id);
+      ttOne.setName(newName);
+      session.update(ttOne);
+      tx.commit();
+    } catch (HibernateException e) {
+      if (tx != null) tx.rollback();
+      e.printStackTrace();
+    } finally {
+      session.close();
+    }
+  }
+
+  // Method to DELETE an employee from the records
+  public void deleteEmployee(Integer id) {
+    Session session = sessionFactory.openSession();
+    Transaction tx = null;
+
+    try {
+      tx = session.beginTransaction();
+      TableTestClass ttOne = (TableTestClass) session.get(TableTestClass.class, id);
+      session.delete(ttOne);
+      tx.commit();
+    } catch (HibernateException e) {
+      if (tx != null) tx.rollback();
+      e.printStackTrace();
+    } finally {
+      session.close();
+    }
+  }
+
 }
 
 /*
