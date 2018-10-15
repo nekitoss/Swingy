@@ -1,13 +1,23 @@
 package ua.nekitoss.model;
 
+import javax.persistence.Column;
+import javax.persistence.MappedSuperclass;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotEmpty;
 
+@MappedSuperclass
 public abstract class AMapElement {
+
   @NotEmpty
+  @Column(name = "name")
   protected String name = "";
+
+  @Transient
   protected int xPos = 0;
+  @Transient
   protected int yPos = 0;
   @NotEmpty
+  @Column(name = "mapSign")
   protected char mapSign;
 
   public String getName() {

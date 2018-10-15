@@ -8,6 +8,9 @@ public class AEnemy extends ASoul {
   @PositiveOrZero
   protected int experienceForKill;
 
+  protected int chanceToLoot = 10;
+
+
 
   protected AEnemy(String name, char sign, @PositiveOrZero int experienceToKill, @PositiveOrZero int attack, @PositiveOrZero int defense, @Positive int hp) {
     this.name = name;
@@ -22,5 +25,13 @@ public class AEnemy extends ASoul {
 
   public int getExperienceForKill() {
     return experienceForKill;
+  }
+
+  public int getChanceToLoot() {
+    return chanceToLoot;
+  }
+
+  public void setChanceToLoot(int chanceToLoot) {
+    this.chanceToLoot = chanceToLoot;
   }
 }

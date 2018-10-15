@@ -1,4 +1,4 @@
-package ua.nekitoss;
+package ua.nekitoss.dbtest;
 
 import javax.persistence.*;
 

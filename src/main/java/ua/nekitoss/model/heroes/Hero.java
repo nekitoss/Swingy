@@ -2,43 +2,81 @@ package ua.nekitoss.model.heroes;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.GenericGenerator;
 import ua.nekitoss.model.AMapElement;
 import ua.nekitoss.model.ASoul;
 import ua.nekitoss.model.equipment.AEquip;
 
+import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
+import java.util.Arrays;
+import java.util.Date;
 
-public  class Hero extends ASoul {
+@Entity
+@Table(name = "heroes")
+public class Hero extends ASoul {
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
+  @GenericGenerator(name = "native", strategy = "native")
+  @Column(name = "id")
+  private int id;
+
+  @Transient
   private static Hero instance;
+
   public enum HeroClass {
     attacker,
-    firstHeroClassType,
-    secondHeroClassType,
-    defaultHero
+    defender,
+    highHp,
+    defaultHero;
+
+    public static String[] names() {
+      return Arrays.toString(HeroClass.values()).replaceAll("^.|.$", "").split(", ");
+    }
   }
 
   @NotNull
-  @Getter
-  @Setter
+//  @Transient
+  @Column(name = "classOfHero")
   protected HeroClass classOfHero;
+
   @PositiveOrZero
+  @Column(name = "level")
   protected int level;
+
   @PositiveOrZero
+  @Column(name = "experience")
   protected int experience;
-  @Getter
-  @Setter
+
+  @Transient
   protected AEquip weapon;
-  @Getter
-  @Setter
+
+  @Transient
   protected AEquip helm;
-  @Getter
-  @Setter
+
+  @Transient
   protected AEquip armor;
 
-  private Hero() {
+  @Column(name = "updated")
+  private Date saved;
+
+  public Date getSaved() {
+    return saved;
+  }
+
+  public void setSaved(Date saved) {
+    this.saved = saved;
+  }
+
+  @PreUpdate
+  protected void onUpdate() {
+    saved = new Date();
+  }
+
+  protected Hero() {
     this.name = "DefaultHero";
     this.mapSign = 'H';
     this.classOfHero = HeroClass.defaultHero;
@@ -55,6 +93,25 @@ public  class Hero extends ASoul {
       instance = new Hero();
     }
     return instance;
+  }
+
+  public Hero(Hero toClone){
+    this.id = toClone.id;
+    this.classOfHero = toClone.classOfHero;
+    this.level = toClone.level;
+    this.experience = toClone.experience;
+    this.weapon = toClone.weapon;
+    this.helm = toClone.helm;
+    this.armor = toClone.armor;
+    this.attack = toClone.attack;
+    this.defense = toClone.defense;
+    this.hp = toClone.hp;
+    this.name = toClone.name;
+    this.xPos = toClone.xPos;
+    this.yPos = toClone.yPos;
+    this.mapSign = toClone.mapSign;
+
+    instance = this;
   }
 
   public Hero(@NotEmpty String name, int xPos, int yPos, @NotEmpty char mapSign, @NotNull HeroClass classOfHero, @PositiveOrZero int level, @PositiveOrZero int experience, @PositiveOrZero int attack, @PositiveOrZero int defense, @Positive int hp) {
@@ -123,6 +180,74 @@ public  class Hero extends ASoul {
             ", yPos=" + yPos +
             ", mapSign=" + mapSign +
             '}';
+  }
+
+  public HeroClass getClassOfHero() {
+    return classOfHero;
+  }
+
+  public void setClassOfHero(HeroClass classOfHero) {
+    this.classOfHero = classOfHero;
+  }
+
+  public AEquip getWeapon() {
+    return weapon;
+  }
+
+  public void setWeapon(AEquip weapon) {
+    this.weapon = weapon;
+  }
+
+  public AEquip getHelm() {
+    return helm;
+  }
+
+  protected void setHelm(AEquip helm) {
+    this.helm = helm;
+  }
+
+  public boolean changeHelm(AEquip helm){
+    if (this.helm == null) {
+      this.helm = helm;
+      return true;
+    }
+    else {
+      if (this.helm.getStatIncrease() < this.getFullHp() || this.helm.getStatIncrease() < helm.getStatIncrease())
+      {
+        this.helm = helm;
+        return true;
+      }
+      else //your hp holds on you helm
+        return false;
+    }
+  }
+
+  public AEquip getArmor() {
+    return armor;
+  }
+
+  public void setArmor(AEquip armor) {
+    this.armor = armor;
+  }
+
+  public int getId() {
+    return id;
+  }
+
+  public void setId(int id) {
+    this.id = id;
+  }
+
+  public int getFullHp(){
+    return this.getHp() + (this.getHelm() == null ? 0 : this.getHelm().getStatIncrease());
+  }
+
+  public int getFullDefence(){
+    return this.getDefense() + (this.getArmor() == null ? 0 : this.getArmor().getStatIncrease());
+  }
+
+  public int getFullAttack(){
+    return this.getAttack() + (this.getWeapon() == null ? 0 : this.getWeapon().getStatIncrease());
   }
 
   //  Weapon[3] weapons;

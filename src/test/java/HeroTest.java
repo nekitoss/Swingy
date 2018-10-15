@@ -9,7 +9,7 @@ public class HeroTest {
 
   @Test
   public void testCalculateLvlByExp(){
-    Hero a = HeroBuilder.createAttacker();
+    Hero a = HeroBuilder.createAttacker("");
     Assert.assertEquals(MESSAGE, 0, a.calculateLvlByExp(0));
     Assert.assertEquals(MESSAGE, 0, a.calculateLvlByExp(1));
     Assert.assertEquals(MESSAGE, 0, a.calculateLvlByExp(999));

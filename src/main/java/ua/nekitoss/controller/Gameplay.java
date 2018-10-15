@@ -6,12 +6,16 @@ import ua.nekitoss.model.GameMap;
 import ua.nekitoss.model.enemy.AEnemy;
 import ua.nekitoss.model.enemy.HighHpPlankton;
 import ua.nekitoss.model.enemy.Plankton;
+import ua.nekitoss.model.equipment.AEquip;
+import ua.nekitoss.model.equipment.EquipBuilder;
 import ua.nekitoss.model.heroes.Hero;
 import ua.nekitoss.model.obstacles.AObstacle;
 import ua.nekitoss.model.obstacles.Stone;
 import ua.nekitoss.model.obstacles.Tree;
 import ua.nekitoss.view.AView;
 import ua.nekitoss.view.graphic.GameFrame;
+
+import java.sql.SQLException;
 import java.util.Random;
 
 public class Gameplay {
@@ -42,7 +46,7 @@ public class Gameplay {
   public static volatile gameState state;
   private GameMap map;
   private Hero hero;
-  private MainFrameController mfc;
+  private FrameController mfc;
   private AView view;
   private boolean printMapEveryTurn;
   private boolean detailedFight;
@@ -72,11 +76,19 @@ public class Gameplay {
     Gameplay.state = state;
   }
 
-  public void setMfc(MainFrameController mfc) {
+  public void setMfc(FrameController mfc) {
     this.mfc = mfc;
   }
 
   public void newLevel(){
+
+    try {
+      DatabaseController.getInstance().saveOrUpdate(hero);
+    } catch (SQLException e) {
+      System.err.println("There is a problem saving hero to database, but you still can play!");
+      e.printStackTrace();
+    }
+
     int mapSize = (hero.getLevel() - 1) * 5 + 10 - (hero.getLevel() % 2);
     GameMap map = GameMap.getInstance().createMap(mapSize);
 
@@ -107,6 +119,7 @@ public class Gameplay {
 
     map.printMap();
     System.out.println();
+    printMap();
 
     view.printlnMsg("You entered new location. Map size is " + GameMap.getSize() + 'x' + GameMap.getSize());
     this.showHeroInfo();
@@ -152,7 +165,7 @@ public class Gameplay {
           Object[] options = {"Yes, kill him!", "No, ruuuun!"};
           if (GameFrame.askEndlessYesNo("Do you want to fight?", "Fight or run", options)) {
             //fight
-            this.fight(map.getSoul(oldX, oldY), map.getSoul(newX, newY));
+            this.fight(map.getSoul(oldX, oldY), map.getSoul(newX, newY), detailedFight);
             this.afterBattle(oldX, oldY, newX, newY);
           } else {
             //run
@@ -183,6 +196,12 @@ public class Gameplay {
         }
         else {//save&exit
           //save hero
+          try {
+            DatabaseController.getInstance().saveOrUpdate(hero);
+          } catch (SQLException e) {
+            System.err.println("There is a problem saving hero to database, but you still can play!");
+            e.printStackTrace();
+          }
           System.exit(0);
         }
       } else
@@ -205,9 +224,14 @@ public class Gameplay {
       if (a.getAttack() - d.getDefense() <= 0 && d.getAttack() - a.getDefense() <= 0)
         System.err.println("infinity fight!");
       else {
+        int i = 0;
+//        view.printMsg("Turn " + (++i) + ": ");
         while (a.getHp() > 0 && d.getHp() > 0) {
-          if (a.attackEnemy(d, showDetailedFight)) //round 1
+          if (showDetailedFight) view.printMsg("Turn " + (++i) + ": ");
+          if (a.attackEnemy(d, showDetailedFight)) { //round 1
+            if (showDetailedFight) view.printMsg("Turn " + (++i) + ": ");
             d.attackEnemy(a, showDetailedFight);//round 2 if alive
+          }
         }
         if (a.getHp() > 0)
           view.printlnMsg(a.getName() + " killed " + d.getName());
@@ -236,7 +260,31 @@ public class Gameplay {
       if (map.getSoul(newX, newY) instanceof AEnemy) {
         int rewardXp = ((AEnemy) map.getSoul(newX, newY)).getExperienceForKill();
         if (hero.addExperience(rewardXp))
-          view.printlnMsg("");
+          view.printlnMsg("You earned new level! You level now is " + hero.getLevel());
+        Random r = new Random();
+        if (r.nextInt(((AEnemy) map.getSoul(newX, newY)).getChanceToLoot()) == 0) {
+          AEquip loot = EquipBuilder.generateRandomEquip();
+          Object[] options = {"Yes, equip brand new item!", "No, throw it to Orodruin in Mordor!"};
+          if (GameFrame.askEndlessYesNo("Do you want this Thing: " + loot.getType().name() + ", called " + loot.getName() +  ", that increase +" + loot.getStatIncrease() + " stat ?", "Collecting garbage", options)) {
+            switch (loot.getType()){
+              case WEAPON:
+                hero.setWeapon(loot);
+                break;
+              case ARMOR:
+                hero.setArmor(loot);
+                break;
+              case HELM:
+                if (!hero.changeHelm(loot)) view.printMsg("You wasn't able to equip it. You are alive only because of existing helmet stats! New equipment was lost.");
+                break;
+            }
+          }
+          else {
+            loot = null;
+            view.printlnMsg("You destroyed loot from enemy");
+          }
+        }
+        else
+          System.out.println("no luck for loot");
       }
       else
         System.err.println("afterBattle musn't be used on non-Enemies!");
@@ -261,11 +309,25 @@ public class Gameplay {
   public void showHeroInfo(){
     StringBuffer heroInfoMsg = new StringBuffer();
     heroInfoMsg.append(hero.getName());
-    heroInfoMsg.append("; Lvl: ");
+    heroInfoMsg.append(": Lvl: ");
     heroInfoMsg.append(hero.getLevel());
-    heroInfoMsg.append("; Hp: ");
+    heroInfoMsg.append(";     Hp: ");
     heroInfoMsg.append(hero.getHp());
     view.printHeroInfo(heroInfoMsg.toString());
+
+    StringBuffer heroInfoMsg2 = new StringBuffer();
+    heroInfoMsg2.append("At: ");
+    heroInfoMsg2.append(hero.getAttack());
+    heroInfoMsg2.append("; De: ");
+    heroInfoMsg2.append(hero.getDefense());
+    heroInfoMsg2.append(";     Equip: He:");
+    heroInfoMsg2.append(hero.getHelm() == null ? '-' : ("+" + hero.getHelm().getStatIncrease()));
+    heroInfoMsg2.append(" ; Ar:");
+    heroInfoMsg2.append(hero.getArmor() == null ? '-' : ("+" + hero.getArmor().getStatIncrease()));
+    heroInfoMsg2.append(" ; We:");
+    heroInfoMsg2.append(hero.getWeapon() == null ? '-' : ("+" + hero.getWeapon().getStatIncrease()));
+    view.printHeroInfo2(heroInfoMsg2.toString());
+
   }
 
   public void setPrintMapEveryTurn(boolean printMapEveryTurn) {
@@ -274,5 +336,9 @@ public class Gameplay {
 
   public void setDetailedFight(boolean detailedFight) {
     this.detailedFight = detailedFight;
+  }
+
+  public void setHero(Hero hero) {
+    this.hero = hero;
   }
 }

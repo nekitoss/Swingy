@@ -6,6 +6,7 @@ public class HighHpPlankton extends AEnemy {
     super("HighHpPlankton", 'B', 1000, 0, 0, 123);
     this.xPos = x;
     this.yPos = y;
+    this.chanceToLoot = 2;
   }
 
   public HighHpPlankton() {

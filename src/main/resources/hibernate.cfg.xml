@@ -13,11 +13,11 @@
     <property name="hbm2ddl.auto">update</property>
 
     <!--<mapping resource="TableTestClass.hbm.xml"/>-->
-    <mapping class="ua.nekitoss.TableTestClass"/>
-    <!--<mapping class="ua.nekitoss.TestTableEntity"/>-->
-    <mapping class="ua.nekitoss.SlaveClass"/>
-    <mapping class="ua.nekitoss.TexClass"/>
-    <mapping class="ua.nekitoss.Tex2Class"/>
+    <!--<mapping class="ua.nekitoss.dbtest.TableTestClass"/>-->
+    <!--<mapping class="ua.nekitoss.dbtest.SlaveClass"/>-->
+    <!--<mapping class="ua.nekitoss.dbtest.TexClass"/>-->
+    <!--<mapping class="ua.nekitoss.dbtest.Tex2Class"/>-->
+    <mapping class="ua.nekitoss.model.heroes.Hero"/>
 
     <!-- DB schema will be updated if needed -->
   </session-factory>

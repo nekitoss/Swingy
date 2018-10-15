@@ -8,7 +8,7 @@ import javax.swing.text.DefaultCaret;
 public class GameFrame extends JFrame implements AView {
   private static GameFrame instance;
 
-  private static final int WIDTH = 500;
+  private static final int WIDTH = 600;
   private static final int HEIGHT = 500;
   private JPanel mainPanel;
   private JScrollPane scrlPane;
@@ -21,6 +21,7 @@ public class GameFrame extends JFrame implements AView {
   private JLabel heroInfoLBL;
   private JCheckBox printMapEveryTurnCheckBox;
   private JCheckBox detailedFightCheckBox;
+  private JLabel heroInfoLBL2;
 
   private GameFrame() {
     setSize(WIDTH, HEIGHT);
@@ -32,6 +33,7 @@ public class GameFrame extends JFrame implements AView {
     gameTA.setEditable(false);
     DefaultCaret caret = (DefaultCaret)gameTA.getCaret();
     caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
+    setTitle("Swingy by nekitoss");
   }
 
   public static GameFrame getInstance(){
@@ -84,6 +86,11 @@ public class GameFrame extends JFrame implements AView {
     heroInfoLBL.setText(msg);
   }
 
+  @Override
+  public void printHeroInfo2(String msg) {
+    heroInfoLBL2.setText(msg);
+  }
+
   public JTextArea getGameTA() {
     return gameTA;
   }
@@ -118,5 +125,9 @@ public class GameFrame extends JFrame implements AView {
 
   public JCheckBox getDetailedFightCheckBox() {
     return detailedFightCheckBox;
+  }
+
+  public JLabel getHeroInfoLBL2() {
+    return heroInfoLBL2;
   }
 }

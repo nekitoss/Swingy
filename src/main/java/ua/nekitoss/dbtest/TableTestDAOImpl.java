@@ -1,4 +1,4 @@
-package ua.nekitoss;
+package ua.nekitoss.dbtest;
 
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
@@ -11,7 +11,6 @@ import javax.swing.*;
 import java.sql.SQLException;
 import java.util.Iterator;
 import java.util.List;
-import java.util.logging.Level;
 
 public class TableTestDAOImpl {
 

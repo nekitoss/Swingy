@@ -19,7 +19,7 @@ public class GameMapTest {
     tmp2 = tmp.map;
     Assert.assertNotNull("correct size (20) doesn't returned obj", tmp.createMap(21));
     Assert.assertNotEquals("arrays are equal", tmp.map, tmp2);
-    Hero h = HeroBuilder.createAttacker();
+    Hero h = HeroBuilder.createAttacker("");
     Assert.assertTrue("wrong return of placeOnMap(0,0), must be empty cell", tmp.placeOnMap(h, 0, 0));
     Assert.assertFalse("Doesn't place soul on map", tmp.isFree(0, 0));
     Assert.assertTrue("wrong return of isFree, must be empty cell", tmp.isFree(1, 1));
