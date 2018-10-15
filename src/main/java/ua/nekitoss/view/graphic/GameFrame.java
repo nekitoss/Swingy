@@ -27,7 +27,7 @@ public class GameFrame extends JFrame implements AView {
     setSize(WIDTH, HEIGHT);
     setContentPane(mainPanel);
     setLocationRelativeTo(null);
-    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
     scrlPane.setAutoscrolls(true);
     gameTA.setEditable(false);

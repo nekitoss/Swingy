@@ -9,7 +9,6 @@ import ua.nekitoss.model.heroes.HeroBuilder;
 import ua.nekitoss.view.graphic.GameFrame;
 
 import java.util.List;
-import java.util.Random;
 
 public class Main {
 
@@ -25,13 +24,7 @@ public class Main {
 //            .getResult();
 //    Hero testHero = HeroBuilder.createAttacker();
 
-    Random r = new Random();
-    int count= 0;
-    for (int i = 0; i < 100; i++){
-      if (r.nextInt(10) == 0)
-        count++;
-    }
-    System.out.println("lucky="+count);
+
     DatabaseController s = new DatabaseController();
     try {
 //      s.saveOrUpdate(testHero);
