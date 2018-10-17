@@ -1,14 +1,12 @@
 package ua.nekitoss.controller;
 
 import ua.nekitoss.model.heroes.Hero;
-import ua.nekitoss.view.graphic.GameFrame;
-import ua.nekitoss.view.graphic.HeroSelectFrame;
+import ua.nekitoss.view.graphic.*;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 
 public class FrameController {
 
@@ -28,24 +26,35 @@ public class FrameController {
   private JCheckBox detailedFightChkBx;
   private JCheckBox mapEveryTurnChkBx;
 
-  private HeroSelectFrame selectFrame;
+
+
+//  private HeroSelectFrame selectFrame;
+  private MenuNewLoadGui menuNewLoadGui;
+  private NewGui newGui;
+  private LoadGui loadGui;
 
   private JComboBox loadBox;
   private JComboBox newBox;
   private JButton newBtn;
+  private JButton createBtn;
   private JButton loadBtn;
+  private JButton loadFinishBtn;
   private JTextField newNameTxtField;
 
-  private JLabel nameLbl;
-  private JLabel experienceLbl;
-  private JLabel levelLbl;
-  private JLabel hpLbl;
-  private JLabel attackLbl;
-  private JLabel defenceLbl;
-  private JLabel helmetLbl;
-  private JLabel armorLbl;
-  private JLabel weaponLbl;
-  private JLabel savedLbl;
+    private JLabel newHpLbl;
+    private JLabel newAttackLbl;
+    private JLabel newDefenceLbl;
+
+  private JLabel loadNameLbl;
+  private JLabel loadExperienceLbl;
+  private JLabel loadLevelLbl;
+  private JLabel loadHpLbl;
+  private JLabel loadAttackLbl;
+  private JLabel loadDefenceLbl;
+  private JLabel loadHelmetLbl;
+  private JLabel loadArmorLbl;
+  private JLabel loadWeaponLbl;
+  private JLabel loadSavedLbl;
 
   private FrameController() {
     initComponents();
@@ -62,18 +71,23 @@ public class FrameController {
 
   public void showMainFrameWindow() {
 //    mapBtn.setVisible(false);
-    selectFrame.setVisible(false);
+//    selectFrame.setVisible(false);
+
     mainFrame.setVisible(true);
   }
 
   public void showSelectFrameWindow() {
     mainFrame.setVisible(false);
-    selectFrame.setVisible(true);
+//    selectFrame.setVisible(true);
+      menuNewLoadGui.getJframeNewLoad().setVisible(true);
   }
 
   private void initComponents() {
     mainFrame = GameFrame.getInstance();
-    selectFrame = HeroSelectFrame.getInstance();
+//    selectFrame = HeroSelectFrame.getInstance();
+    menuNewLoadGui = new MenuNewLoadGui();
+    newGui = new NewGui();
+    loadGui = new LoadGui();
 
     gameTA = mainFrame.getGameTA();
     upBtn = mainFrame.getUpBtn();
@@ -86,22 +100,35 @@ public class FrameController {
     detailedFightChkBx = mainFrame.getDetailedFightCheckBox();
     mapEveryTurnChkBx = mainFrame.getPrintMapEveryTurnCheckBox();
 
-    loadBox = selectFrame.getHeroListBox();
-    newBtn = selectFrame.getNewButton();
-    loadBtn = selectFrame.getLoadButton();
-    newBox = selectFrame.getNewBox();
-    newNameTxtField = selectFrame.getHeroNameTextField();
+//    loadBox = selectFrame.getHeroListBox();
+    loadBox = loadGui.getHeroListBox();
+//    newBtn = selectFrame.getNewButton();
+    newBtn = menuNewLoadGui.getNewBtn();
+    createBtn = newGui.getCreateBtn();
+//    loadBtn = selectFrame.getLoadButton();
+    loadBtn = menuNewLoadGui.getLoadBtn();
+//    newBox = selectFrame.getNewBox();
+    newBox = newGui.getNewBox();
+//    newNameTxtField = selectFrame.getHeroNameTextField();
+    newNameTxtField = newGui.getHeroNameTextField();
 
-    nameLbl = selectFrame.getNameLbl();
-    experienceLbl = selectFrame.getExperienceLbl();
-    levelLbl = selectFrame.getLevelLbl();
-    hpLbl = selectFrame.getHpLbl();
-    attackLbl = selectFrame.getAttackLbl();
-    defenceLbl = selectFrame.getDefenceLbl();
-    helmetLbl = selectFrame.getHelmetLbl();
-    armorLbl = selectFrame.getArmorLbl();
-    weaponLbl = selectFrame.getWeaponLbl();
-    savedLbl = selectFrame.getSavedLbl();
+
+
+      newHpLbl = newGui.getHpLbl();
+      newAttackLbl = newGui.getAttackLbl();
+      newDefenceLbl = newGui.getDefenceLbl();
+
+    loadNameLbl = loadGui.getNameLbl();
+    loadExperienceLbl = loadGui.getExperienceLbl();
+    loadLevelLbl = loadGui.getLevelLbl();
+    loadHpLbl = loadGui.getHpLbl();
+    loadAttackLbl = loadGui.getAttackLbl();
+    loadDefenceLbl = loadGui.getDefenceLbl();
+      loadHelmetLbl = loadGui.getHelmetLbl();
+      loadArmorLbl = loadGui.getArmorLbl();
+      loadWeaponLbl = loadGui.getWeaponLbl();
+    loadSavedLbl = loadGui.getSavedLbl();
+    loadFinishBtn= loadGui.getLoadFinishBtn();
   }
 
   private void initListeners() {
@@ -116,6 +143,8 @@ public class FrameController {
     newBtn.addActionListener(new NewBtnListener());
     loadBtn.addActionListener(new LoadBtnListener());
     loadBox.addActionListener(new HeroLoadComboBoxListener());
+    createBtn.addActionListener(new CreateBtnListener());
+    loadFinishBtn.addActionListener(new LoadFinishBtnListener());
   }
 
   private void setFill(){
@@ -128,7 +157,7 @@ public class FrameController {
     if (herolist.size() > 0) {
       String[] items2 = DatabaseController.getHeroNamesListFromHeroList(herolist);
       loadBox.setModel(new DefaultComboBoxModel(items2));
-      fillHeroInfo(herolist.get(0));
+      fillHeroInfoToLoad(herolist.get(0));
     }
     else
     {
@@ -146,18 +175,18 @@ public class FrameController {
     gameTA.append(msg + '\n');
   }
 
-  public void fillHeroInfo(Hero hero){
-    nameLbl.setText(hero.getName());
-    experienceLbl.setText(Integer.toString(hero.getExperience()));
-    levelLbl.setText(Integer.toString(hero.getLevel()));
-    hpLbl.setText(Integer.toString(hero.getHp()));
-    attackLbl.setText(Integer.toString(hero.getAttack()));
-    defenceLbl.setText(Integer.toString(hero.getDefense()));
-//    helmetLbl.setText(hero.getHelm());
-//    armorLbl.setText(hero.getArmor());
-//    weaponLbl.setText(hero.getWeapon());
+  public void fillHeroInfoToLoad(Hero hero){
+    loadNameLbl.setText(hero.getName());
+    loadExperienceLbl.setText(Integer.toString(hero.getExperience()));
+    loadLevelLbl.setText(Integer.toString(hero.getLevel()));
+    loadHpLbl.setText(Integer.toString(hero.getHp()));
+    loadAttackLbl.setText(Integer.toString(hero.getAttack()));
+    loadDefenceLbl.setText(Integer.toString(hero.getDefense()));
+//    loadHelmetLbl.setText(hero.getHelm().toString());
+//    loadArmorLbl.setText(hero.getArmor().toString());
+//    loadWeaponLbl.setText(hero.getWeapon().toString());
     SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss   dd.MM.yyyy");
-    savedLbl.setText(sdf.format(hero.getSaved()));
+    loadSavedLbl.setText(sdf.format(hero.getSaved()));
   }
 
   private class UpBtnListener implements ActionListener {
@@ -202,7 +231,7 @@ public class FrameController {
     }
   }
 
-  private class NewBtnListener implements ActionListener {
+  private class CreateBtnListener implements ActionListener {
     public void actionPerformed(ActionEvent e) {
       if (newNameTxtField.getText().isEmpty()){
         JOptionPane.showMessageDialog(null, "You must input Name for Hero!");
@@ -214,13 +243,25 @@ public class FrameController {
     }
   }
 
-  private class LoadBtnListener implements ActionListener {
+  private class NewBtnListener implements ActionListener {
     public void actionPerformed(ActionEvent e) {
-      int selectedCheckboxNum = loadBox.getSelectedIndex();
-//      int selectedHeroId = (LoadHeroController.getInstance().getHeroList()).get(selectedCheckboxNum).getId();
-      LoadHeroController.getInstance().loadHero(selectedCheckboxNum);
+      newGui.getJframeNewHero().setVisible(true);
     }
   }
+
+  private class LoadBtnListener implements ActionListener {
+    public void actionPerformed(ActionEvent e) {
+        loadGui.getJframeLoadHero().setVisible(true);
+    }
+  }
+
+    private class LoadFinishBtnListener implements ActionListener {
+        public void actionPerformed(ActionEvent e) {
+            int selectedCheckboxNum = loadBox.getSelectedIndex();
+//      int selectedHeroId = (LoadHeroController.getInstance().getHeroList()).get(selectedCheckboxNum).getId();
+            LoadHeroController.getInstance().loadHero(selectedCheckboxNum);
+        }
+    }
 
   private class MapBtnListener implements ActionListener {
     public void actionPerformed(ActionEvent e) {
@@ -232,7 +273,7 @@ public class FrameController {
   private class HeroLoadComboBoxListener implements ActionListener {
     public void actionPerformed(ActionEvent e) {
       int selectedCheckboxNum = loadBox.getSelectedIndex();
-      fillHeroInfo((LoadHeroController.getInstance().getHeroList()).get(selectedCheckboxNum));
+      fillHeroInfoToLoad((LoadHeroController.getInstance().getHeroList()).get(selectedCheckboxNum));
     }
   }
 }
