@@ -82,6 +82,12 @@ public class FrameController {
       menuNewLoadGui.getJframeNewLoad().setVisible(true);
   }
 
+  public void hideChooserWindows()  {
+      menuNewLoadGui.getJframeNewLoad().setVisible(false);
+      newGui.getJframeNewHero().setVisible(false);
+      loadGui.getJframeLoadHero().setVisible(false);
+  }
+
   private void initComponents() {
     mainFrame = GameFrame.getInstance();
 //    selectFrame = HeroSelectFrame.getInstance();
@@ -246,6 +252,7 @@ public class FrameController {
       }
       else {
         int selectedHeroType = newBox.getSelectedIndex();
+        hideChooserWindows();
         LoadHeroController.getInstance().createNewHero((Hero.HeroClass.values())[selectedHeroType], newNameTxtField.getText());
       }
     }
@@ -268,6 +275,7 @@ public class FrameController {
         public void actionPerformed(ActionEvent e) {
             int selectedCheckboxNum = loadBox.getSelectedIndex();
 //      int selectedHeroId = (LoadHeroController.getInstance().getHeroList()).get(selectedCheckboxNum).getId();
+            hideChooserWindows();
             LoadHeroController.getInstance().loadHero(selectedCheckboxNum);
         }
     }
