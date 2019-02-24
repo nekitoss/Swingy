@@ -92,30 +92,30 @@ public class HeroBuilder implements IHeroBuilder{
   }
 
   public static Hero createAttacker(String name){
-    return new Hero(name, 0, 0, 'A', Hero.HeroClass.attacker, 0, 0, 20, 1, 10);
+    return new Hero(name, 0, 0, 'A', Hero.HeroClass.ATTACKER, 0, 0, 20, 1, 10);
   }
 
   public static Hero createDefender(String name){
-    return new Hero(name, 0, 0, 'A', Hero.HeroClass.defender, 0, 0, 1, 10, 10);
+    return new Hero(name, 0, 0, 'A', Hero.HeroClass.DEFENDER, 0, 0, 1, 10, 10);
   }
 
   public static Hero createHighHp(String name){
-    return new Hero(name, 0, 0, 'A', Hero.HeroClass.highHp, 0, 0, 1, 1, 100);
+    return new Hero(name, 0, 0, 'A', Hero.HeroClass.HIGH_HP, 0, 0, 1, 1, 100);
   }
 
   public static Hero createDefaultHero(String name){
-    return new Hero(name, 0, 0, 'A', Hero.HeroClass.defaultHero, 0, 0, 10, 2, 30);
+    return new Hero(name, 0, 0, 'A', Hero.HeroClass.DEFAULT_HERO, 0, 0, 10, 2, 30);
   }
 
   public static Hero createHeroByType(Hero.HeroClass heroToBeCreated, String name){
     switch (heroToBeCreated) {
-      case attacker:
+      case ATTACKER:
         return createAttacker(name);
-      case defender:
+      case DEFENDER:
         return createDefender(name);
-      case highHp:
+      case HIGH_HP:
         return createHighHp(name);
-      case defaultHero:
+      case DEFAULT_HERO:
       default:
         return createDefaultHero(name);
     }

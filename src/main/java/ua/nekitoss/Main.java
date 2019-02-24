@@ -19,7 +19,7 @@ public class Main {
 //            .setHeroHp(10)
 //            .setHeroExp(0)
 //            .setHeroDefence(2)
-//            .setHeroClass(Hero.HeroClass.defaultHero)
+//            .setHeroClass(Hero.HeroClass.DEFAULT_HERO)
 //            .setHeroAttack(20)
 //            .getResult();
 //    Hero testHero = HeroBuilder.createAttacker();

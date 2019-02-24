@@ -47,10 +47,6 @@ public class NewGui {
 
         statsJPanel = new JPanel();
         statsJPanel.setLayout(new GridLayout(3,2));
-        statsJPanel.add(new JLabel("Health:"));
-        hpLbl = new JLabel();
-        statsJPanel.add(hpLbl);
-
         statsJPanel.add(new JLabel("Attack:"));
         attackLbl = new JLabel();
         statsJPanel.add(attackLbl);
@@ -58,6 +54,10 @@ public class NewGui {
         statsJPanel.add(new JLabel("Defence:"));
         defenceLbl = new JLabel();
         statsJPanel.add(defenceLbl);
+
+        statsJPanel.add(new JLabel("Health:"));
+        hpLbl = new JLabel();
+        statsJPanel.add(hpLbl);
 
         jpanelNew.add(statsJPanel);
 

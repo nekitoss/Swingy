@@ -1,9 +1,6 @@
 package ua.nekitoss.model.heroes;
 
-import lombok.Getter;
-import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
-import ua.nekitoss.model.AMapElement;
 import ua.nekitoss.model.ASoul;
 import ua.nekitoss.model.equipment.AEquip;
 
@@ -27,11 +24,18 @@ public class Hero extends ASoul {
   @Transient
   private static Hero instance;
 
+  public static final int[][] PREDEFINED_HERO_STATS = {
+//(attack, defense, hp);
+    {20, 1, 10},  //attacker
+    {1, 10, 10},  //defender
+    {1, 1, 100},   //high_hp
+    {10, 2, 30}   //default
+  };
   public enum HeroClass {
-    attacker,
-    defender,
-    highHp,
-    defaultHero;
+    ATTACKER,
+    DEFENDER,
+    HIGH_HP,
+    DEFAULT_HERO;
 
     public static String[] names() {
       return Arrays.toString(HeroClass.values()).replaceAll("^.|.$", "").split(", ");
@@ -79,7 +83,7 @@ public class Hero extends ASoul {
   protected Hero() {
     this.name = "DefaultHero";
     this.mapSign = 'H';
-    this.classOfHero = HeroClass.defaultHero;
+    this.classOfHero = HeroClass.DEFAULT_HERO;
     this.level = 0;
     this.experience = 0;
     this.attack = 0;

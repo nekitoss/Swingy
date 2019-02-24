@@ -144,6 +144,7 @@ public class FrameController {
     loadBtn.addActionListener(new LoadBtnListener());
     loadBox.addActionListener(new HeroLoadComboBoxListener());
     createBtn.addActionListener(new CreateBtnListener());
+    newBox.addActionListener(new HeroNewComboBoxListener());
     loadFinishBtn.addActionListener(new LoadFinishBtnListener());
   }
 
@@ -173,6 +174,13 @@ public class FrameController {
 
   public void printlnMsg(String msg){
     gameTA.append(msg + '\n');
+  }
+
+  public void fillHeroInfoToNew(int heroNum){
+    //if heroNum < arr.len
+    newAttackLbl.setText(String.valueOf((Hero.PREDEFINED_HERO_STATS)[heroNum][0]));
+    newDefenceLbl.setText(String.valueOf((Hero.PREDEFINED_HERO_STATS)[heroNum][1]));
+    newHpLbl.setText(String.valueOf((Hero.PREDEFINED_HERO_STATS)[heroNum][2]));
   }
 
   public void fillHeroInfoToLoad(Hero hero){
@@ -245,6 +253,7 @@ public class FrameController {
 
   private class NewBtnListener implements ActionListener {
     public void actionPerformed(ActionEvent e) {
+      fillHeroInfoToNew(0);
       newGui.getJframeNewHero().setVisible(true);
     }
   }
@@ -274,6 +283,13 @@ public class FrameController {
     public void actionPerformed(ActionEvent e) {
       int selectedCheckboxNum = loadBox.getSelectedIndex();
       fillHeroInfoToLoad((LoadHeroController.getInstance().getHeroList()).get(selectedCheckboxNum));
+    }
+  }
+
+  private class HeroNewComboBoxListener implements ActionListener {
+    public void actionPerformed(ActionEvent e) {
+      int selectedCheckboxNum = newBox.getSelectedIndex();
+      fillHeroInfoToNew(selectedCheckboxNum);
     }
   }
 }
