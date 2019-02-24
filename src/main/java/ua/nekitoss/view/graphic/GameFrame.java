@@ -2,6 +2,7 @@ package ua.nekitoss.view.graphic;
 
 import ua.nekitoss.view.AView;
 
+import java.awt.Font;
 import javax.swing.*;
 import javax.swing.text.DefaultCaret;
 
@@ -31,6 +32,7 @@ public class GameFrame extends JFrame implements AView {
 
     scrlPane.setAutoscrolls(true);
     gameTA.setEditable(false);
+    gameTA.setFont(new Font("monospaced", Font.PLAIN, 12));
     DefaultCaret caret = (DefaultCaret)gameTA.getCaret();
     caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
     setTitle("Swingy by nekitoss");
